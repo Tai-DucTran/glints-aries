@@ -51,7 +51,7 @@ export const OptionList = ({
   width,
   menuOptions,
 }: OptionListProps) => {
-  const [hasMenuOptions, setHasMenuOptions] = useState(false);
+  const [hasMenuOptions, setHasMenuOptions] = useState(menuOptions?.length > 0);
 
   useEffect(() => {
     setHasMenuOptions(menuOptions?.length > 0);
