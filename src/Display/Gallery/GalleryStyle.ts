@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { Greyscale } from '../../Utils/Colors';
+import { imageSizeMapping, Size } from './Gallery';
 
 export const GalleryContainer = styled.div`
   position: relative;
@@ -13,13 +14,15 @@ export const GalleryContainer = styled.div`
   }
 `;
 
-export const GalleryItemWrapper = styled.div`
+export const GalleryItemWrapper = styled.div<{
+  size?: Size;
+}>`
   display: flex;
   flex-wrap: wrap;
 
   img {
-    height: 5em;
-    width: 5em;
+    height: ${({ size = 'small' }) => imageSizeMapping[size]};
+    width: ${({ size = 'small' }) => imageSizeMapping[size]};
     object-fit: cover;
     cursor: pointer;
   }

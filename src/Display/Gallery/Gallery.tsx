@@ -12,12 +12,24 @@ import {
   GalleryImageWrapper,
   GalleryThumbnailWrapper,
 } from './GalleryStyle';
+const imageGallerySize = ['small', 'regular', 'large'] as const;
+
+export type Size = (typeof imageGallerySize)[number];
+
+export const imageSizeMapping = {
+  ['small']: '5em',
+  ['regular']: '10em',
+  ['large']: '15em',
+};
+
+const isValidSize = (str: any): str is Size => imageGallerySize.includes(str);
 
 const Gallery = ({
   initialVisibility = false,
   children,
   imagesDisplayed = 8,
-}: Props) => {
+  imageSize = imageGallerySize[0],
+}: GalleryProps) => {
   const sliderRef = React.useRef<HTMLDivElement>();
 
   const [visible, setVisible] = React.useState<boolean>(initialVisibility);
@@ -50,9 +62,15 @@ const Gallery = ({
     [visible]
   );
 
+  if (!isValidSize(imageSize)) {
+    console.warn(
+      `Size: ${imageSize} is not of type ImageSize | undefined. \ntype size ${imageGallerySize}`
+    );
+  }
+
   return (
     <GalleryContainer className="aries-gallery">
-      <GalleryItemWrapper className="gallery-wrapper">
+      <GalleryItemWrapper className="gallery-wrapper" size={imageSize}>
         {React.Children.toArray(children)
           .slice(0, imagesDisplayed)
           .map((data: React.ReactElement<React.HTMLProps<'img'>>, index) => (
@@ -118,12 +136,13 @@ const Gallery = ({
   );
 };
 
-export interface Props {
+export interface GalleryProps {
   children?: React.ReactNode;
   /** How many thumbnails the (unopened) gallery should show */
   imagesDisplayed?: number;
   /** If true, the Gallery will open itself on mount */
   initialVisibility?: boolean;
+  imageSize?: Size;
 }
 
 export default Gallery;
